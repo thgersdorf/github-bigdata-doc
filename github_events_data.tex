@@ -1,0 +1,315 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{filecontents}
+\usepackage{graphics}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+\usepackage{cancel}
+\usepackage{mathtools}
+\usepackage{ifthen}
+\usepackage{minibox}
+\usepackage{color}
+\usepackage{bigdelim, bigstrut}
+\usepackage{tocloft}
+\usepackage{framed}
+\usepackage{enumitem}
+
+\usepackage[left=20mm,right=20mm,top=20mm,bottom=20mm,foot=10mm]{geometry}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CODE LISTINGS for source code of different programming languages in color
+\usepackage{listings}
+\usepackage{color}
+\usepackage{textcomp}
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
+\definecolor{listinggray}{gray}{0.9}
+\definecolor{lbcolor}{rgb}{0.9,0.9,0.9}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=JavaScript,
+	numbers=left,
+	numberstyle=\footnotesize,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={0.3\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+	basicstyle=\small\ttfamily,
+        identifierstyle=\ttfamily,
+%         keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+%% end code listings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+
+
+%opening
+\title{Github Events Data}
+\author{Thomas Gersdorf}
+
+\addbibresource{smi.bib}
+
+\setlength\parindent{0cm}
+
+ 
+
+\input{../math_setup/thg_math_setup.tex} % include math macros
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{Fundamental Measures}
+\subsection{Terminology}
+\begin{description}
+ \item[Gist] Gists are snippets of code to be shared with others. Can be clone, forked etc. like a repository.
+\item [Fork] Forks are clones/copies of a repository or Gist into a User's own account.
+\end{description}
+
+\subsection{Users}
+
+\begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{2cm}|}\hline
+\textbf{Event type} & \textbf{Description}&  \textbf{Contents}& \textbf{\#  for all users in example dataset} \\\hline
+ IssuesEvent  &    &  Opening \& Closing of Issue, Assignee (API) &29368\\\hline
+CreateEvent    &    & &  116683\\\hline
+PushEvent   &    &   &  298729\\\hline
+GistEvent   &    &   &  26267\\\hline
+Issue
+CommentEvent &    &    &   45166\\\hline
+Commit
+CommentEvent &    &    &  7827\\\hline
+ForkEvent   &    &    & 19867\\\hline
+WatchEvent  &  &    &   65193\\\hline
+PullRequestEvent     &    &  &  20818\\\hline
+PullRequest
+ReviewCommentEvent  & && 3726\\\hline
+FollowEvent   &    &  & 17049\\\hline
+GollumEvent  &    &  &  11781\\\hline
+DeleteEvent   &    &  &   3785\\\hline
+MemberEvent   &    & &    2764\\\hline
+DownloadEvent  &    & & 2576\\\hline
+PublicEvent &  &    &  553\\\hline
+TotalEvents & - & - & 672152 \\\hline
+
+\end{tabular}
+
+
+\subsection{Repositories}
+
+
+
+\section{Constructed Leadership Measures}
+\subsection{Envisioning and Goal Orientation}
+
+\begin{align}
+ LS_{\text{milestone}} = \frac{\text{\# issue directly assigned to a milestone or release}}{\text{\# total issues opened}} 
+\end{align}
+
+
+
+
+\subsection{Leading People}
+\subsubsection{Open Issue and Assign  User/Milestone}
+
+\textbf{Measure:}
+\begin{align}
+ LS_{\text{assign}} = \frac{\text{\# issue directly assigned to other person}}{\text{\# total issues opened}} 
+\end{align}
+
+
+\textbf{Reasoning:}
+The more people directly assign users to issues, the more they know about the people's capabilities and empower other users to solve this issue.
+
+
+
+\textbf{Control for:}
+\begin{itemize}
+ \item Total number of issues
+\item Size of project
+\end{itemize}
+
+
+
+Assignee currently only via API from \texttt{ https://api.github.com/repos/thgersdorf/github-play/issues/1
+}, see reference.
+
+
+
+\subsection{Empowering}
+
+
+\subsection{Project Governance}
+
+
+
+
+
+
+
+
+
+\section{Performance Measures}
+\subsection{Contributors}
+\subsection{Release, Commits, Issue closures}
+
+\begin{align}
+ \text{Issue closing} = \frac{}{}
+\end{align}
+
+
+\textbf{Issue User Effectiveness:} 
+\begin{align}
+ IUE = \frac{\Delta \frac{\text{\# Issues Open }}{\text{\# Total Issues}}}{\Delta\text{\# User contributing}}
+\end{align}
+
+
+
+\subsection{Downloads, Views etc.}
+
+
+\section{Reference}
+\subsection{Assignee from API}
+Example URL: \texttt{https://api.github.com/repos/thgersdorf/github-play/issues/1}
+
+\begin{lstlisting}
+ {
+  "url": "https://api.github.com/repos/kevans91/Chatters/issues/5",
+  "labels_url": "https://api.github.com/repos/kevans91/Chatters/issues/5/labels{/name}",
+  "comments_url": "https://api.github.com/repos/kevans91/Chatters/issues/5/comments",
+  "events_url": "https://api.github.com/repos/kevans91/Chatters/issues/5/events",
+  "html_url": "https://github.com/kevans91/Chatters/issues/5",
+  "id": 4059710,
+  "number": 5,
+  "title": "Locked Menu Entries",
+  "user": {
+    "login": "kevans91",
+    "id": 646318,
+    "avatar_url": "https://gravatar.com/avatar/8d4c2928fe43bb196970867f59ab6b93?d=https%3A%2F%2Fidenticons.github.com%2F5b22ea77797a2c6e6e0859b128be4d94.png&r=x",
+    "gravatar_id": "8d4c2928fe43bb196970867f59ab6b93",
+    "url": "https://api.github.com/users/kevans91",
+    "html_url": "https://github.com/kevans91",
+    "followers_url": "https://api.github.com/users/kevans91/followers",
+    "following_url": "https://api.github.com/users/kevans91/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kevans91/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kevans91/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kevans91/subscriptions",
+    "organizations_url": "https://api.github.com/users/kevans91/orgs",
+    "repos_url": "https://api.github.com/users/kevans91/repos",
+    "events_url": "https://api.github.com/users/kevans91/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kevans91/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "url": "https://api.github.com/repos/kevans91/Chatters/labels/enhancement",
+      "name": "enhancement",
+      "color": "84b6eb"
+    }
+  ],
+  "state": "open",
+  "assignee": null,
+  "milestone": null,
+  "comments": 0,
+  "created_at": "2012-04-11T06:43:08Z",
+  "updated_at": "2012-04-11T06:43:08Z",
+  "closed_at": null,
+  "pull_request": {
+    "html_url": null,
+    "diff_url": null,
+    "patch_url": null
+  },
+  "body": "Locked menu entries currently clutter up the menus at the top pretty badly. They either need to be removed or used.",
+  "closed_by": null
+}
+\end{lstlisting}
+
+\subsection{Raw JSONs}
+\subsubsection{Issues}
+
+\begin{lstlisting}
+ "repository":{"homepage":"http://tdurand.github.com/mapafortaleza",
+"has_downloads":true,"has_issues":true,"master_branch":"gh-pages","forks":5,"language":"JavaScript","fork":false,"has_wiki":true,"url":"https://github.com/tdurand/mapafortaleza","created_at":"2011/09/29 03:27:42 -0700","size":132,"private":false,"name":"mapafortaleza","description":"Mapa de Fortaleza","owner":"tdurand","open_issues":9,"watchers":13,"pushed_at":"2012/02/29 16:43:30 -0800"},
+"actor_attributes":{"name":"Thibault Durand","company":"@tibbb","gravatar_id":"cedb88f236afaeed4caea39917ebd0a7","blog":"http://www.thibault-durand.fr","type":"User","login":"tdurand"}
+,"created_at":"2012/04/11 16:01:27 -0700","public":true,"actor":"tdurand","payload":{"number":12,"action":"opened","issue":4075341},"url":"https://github.com/tdurand/mapafortaleza/issues/12","type":"
+IssuesEvent"}
+\end{lstlisting}
+
+
+\subsection{SQL Queries Temp}
+\lstset{
+	backgroundcolor=\color{lbcolor},
+	tabsize=4,
+	rulecolor=,
+	language=SQL,
+	numbers=left,
+	numberstyle=\footnotesize,
+        basicstyle=\scriptsize,
+        upquote=true,
+        aboveskip={0.3\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+        frame=single,
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+	basicstyle=\small\ttfamily,
+        identifierstyle=\ttfamily,
+%         keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+}
+
+
+\subsubsection{Generic Event Queries}
+\begin{lstlisting}
+ # specific Issues properties
+ SELECT payload_number, payload_action, payload_issue from events where type   = 'IssuesEvent' LIMIT 30;
+
+\end{lstlisting}
+
+
+
+
+
+\end{document}
+

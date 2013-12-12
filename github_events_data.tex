@@ -95,7 +95,7 @@
 \maketitle
 
 
-\section{Fundamental Measures}
+\section{Fundamental and Derived Measures}
 \subsection{Terminology}
 \begin{description}
  \item[Gist] Gists are snippets of code to be shared with others. Can be clone, forked etc. like a repository.
@@ -106,9 +106,9 @@
 
 \begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{2cm}|}\hline
 \textbf{Event type} & \textbf{Description}&  \textbf{Contents}& \textbf{\#  for all users in example dataset} \\\hline
- IssuesEvent  &    &  Opening \& Closing of Issue, Assignee (API) &29368\\\hline
+ IssuesEvent  &    &  Opened \& Closed Issues, Assignee (API) &29368\\\hline
 CreateEvent    &    & &  116683\\\hline
-PushEvent   &    &   &  298729\\\hline
+PushEvent  & Source code is pushed into repository. &  Size, SHA Hash &  298729\\\hline
 GistEvent   &    &   &  26267\\\hline
 Issue
 CommentEvent &    &    &   45166\\\hline
@@ -128,6 +128,18 @@ PublicEvent &  &    &  553\\\hline
 TotalEvents & - & - & 672152 \\\hline
 
 \end{tabular}
+
+
+Constructed measures:
+\begin{description}
+ \item [Issues\_Opened] \# of issues the user has opened
+ \item [Issues\_Closed] \# of issues the user has closed
+\item [Event\_Continuity] $\to$ TODO
+\item [Events\_Own] Events on user's repository
+\item [Events\_Active\_Involvement] Measure how much the user engages in projects of other user or organizations, events on other repository
+\item [Events\_Passive\_Involvment] Measures how much other users engage in projects of the user, events on the user's repository by other users
+\end{description}
+
 
 
 \subsection{Repositories}
@@ -177,9 +189,13 @@ Assignee currently only via API from \texttt{ https://api.github.com/repos/thger
 \subsection{Project Governance}
 
 
+\subsubsection{Closing issues by other people's commits | Gatekeepers}
+\textbf{Measure:}
+\begin{align}
+ LS_{\text{assign}} = \frac{\text{\# issue directly assigned to other person}}{\text{\# total issues opened}} 
+\end{align}
 
-
-
+\textbf{Control for:}
 
 
 
@@ -261,7 +277,7 @@ Example URL: \texttt{https://api.github.com/repos/thgersdorf/github-play/issues/
 \end{lstlisting}
 
 \subsection{Raw JSONs}
-\subsubsection{Issues}
+\subsubsection{IssuesEvent}
 
 \begin{lstlisting}
  "repository":{"homepage":"http://tdurand.github.com/mapafortaleza",
@@ -270,6 +286,39 @@ Example URL: \texttt{https://api.github.com/repos/thgersdorf/github-play/issues/
 ,"created_at":"2012/04/11 16:01:27 -0700","public":true,"actor":"tdurand","payload":{"number":12,"action":"opened","issue":4075341},"url":"https://github.com/tdurand/mapafortaleza/issues/12","type":"
 IssuesEvent"}
 \end{lstlisting}
+
+\subsubsection{PushEvent}
+
+\begin{lstlisting}
+{"repository":{"homepage":"","has_downloads":true,"has_issues":true,"
+forks":1,"fork":false,"has_wiki":true,"url":"https://github.com/brunolopesjn/JConvexHull","created_at":"2012/04/10 18:37:34 -0700","size":208,"private":false,"name":"JConvexHull","description":"Programa Java Swing que resolve o problema do caixeiro viajante (TSP) utilizando o Convexo de Hull","owner":"brunolopesjn","open_issues":0,"watchers":1,"pushed_at":"2012/04/11 15:01:36 -0700"},"actor_attributes":{"name":"Bruno Lopes Alcantara Batista","gravatar_id":"854bf813e2a302dcc4a059b89c502424","blog":"kariridev.blogspot.com","type":"User","login":"brunolopesjn","email":"brunolopesjn@gmail.com"},"created_at":"2012/04/11 15:01:37 -0700","public":true,"actor":"brunolopesjn","payload":{"head":"8469f67ff919f2a776336bfe61f5ae7f40e76c72","size":1,"shas":[["8469f67ff919f2a776336bfe61f5ae7f40e76c72","brunolopesjn@gmail.com","Criado a interface grafica base, a Ã¡rea de desenho dos pontos, o desenho\ndo plano cartesiano e a lÃ³gica de abertura de arquivos.","Bruno Lopes Alcantara Batista",true]],"ref":"refs/heads/master"},"
+url":"https://github.com/brunolopesjn/JConvexHull/compare/ea77edbd70...8469f67ff9","type":"PushEvent"}
+\end{lstlisting}
+
+\subsubsection{IssueCommentEvent}
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\subsubsection{CommitCommentEvent}
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\subsubsection{ForkEvent}
+\begin{lstlisting}
+
+\end{lstlisting}
+
+\subsubsection{FollowEvent}
+\begin{lstlisting}
+
+\end{lstlisting}
+
+
+
+
+
 
 
 \subsection{SQL Queries Temp}
@@ -302,6 +351,10 @@ IssuesEvent"}
 
 \subsubsection{Generic Event Queries}
 \begin{lstlisting}
+ # total events involvements:
+ SELECT * FROM `events` WHERE `actor` = 'mitar' AND `repository_owner` != 'mitar'
+SELECT * FROM `events` WHERE `actor` = 'mitar' AND `repository_owner` = 'mitar'
+
  # specific Issues properties
  SELECT payload_number, payload_action, payload_issue from events where type   = 'IssuesEvent' LIMIT 30;
 

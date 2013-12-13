@@ -87,7 +87,7 @@
 
  
 
-\input{../math_setup/thg_math_setup.tex} % include math macros
+\input{../../math_setup/thg_math_setup.tex} % include math macros
 
 
 \begin{document}
@@ -102,11 +102,13 @@
 \item [Fork] Forks are clones/copies of a repository or Gist into a User's own account.
 \end{description}
 
+Detailed information on Github's Event API can be found in \url{http://developer.github.com/v3/activity/events/types/} .
+
 \subsection{Users}
 
 \begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{2cm}|}\hline
 \textbf{Event type} & \textbf{Description}&  \textbf{Contents}& \textbf{\#  for all users in example dataset} \\\hline
- IssuesEvent  &    &  Opened \& Closed Issues, Assignee (API) &29368\\\hline
+ IssuesEvent  & An issues is opened or closed.   &  Opened \& Closed Issues, Assignee (API) &29368\\\hline
 CreateEvent    &    & &  116683\\\hline
 PushEvent  & Source code is pushed into repository. &  Size, SHA Hash &  298729\\\hline
 GistEvent   &    &   &  26267\\\hline
@@ -126,17 +128,18 @@ MemberEvent   &    & &    2764\\\hline
 DownloadEvent  &    & & 2576\\\hline
 PublicEvent &  &    &  553\\\hline
 TotalEvents & - & - & 672152 \\\hline
-
 \end{tabular}
 
 
-Constructed measures:
+
+
+\textbf{Constructed measures}:
 \begin{description}
  \item [Issues\_Opened] \# of issues the user has opened
  \item [Issues\_Closed] \# of issues the user has closed
 \item [Event\_Continuity] $\to$ TODO
 \item [Events\_Own] Events on user's repository
-\item [Events\_Active\_Involvement] Measure how much the user engages in projects of other user or organizations, events on other repository
+\item [Events\_Active\_Involvement] Measure how much the user engages in projects of other user or organizations, events on other repositories 
 \item [Events\_Passive\_Involvment] Measures how much other users engage in projects of the user, events on the user's repository by other users
 \end{description}
 
@@ -291,7 +294,7 @@ IssuesEvent"}
 
 \begin{lstlisting}
 {"repository":{"homepage":"","has_downloads":true,"has_issues":true,"
-forks":1,"fork":false,"has_wiki":true,"url":"https://github.com/brunolopesjn/JConvexHull","created_at":"2012/04/10 18:37:34 -0700","size":208,"private":false,"name":"JConvexHull","description":"Programa Java Swing que resolve o problema do caixeiro viajante (TSP) utilizando o Convexo de Hull","owner":"brunolopesjn","open_issues":0,"watchers":1,"pushed_at":"2012/04/11 15:01:36 -0700"},"actor_attributes":{"name":"Bruno Lopes Alcantara Batista","gravatar_id":"854bf813e2a302dcc4a059b89c502424","blog":"kariridev.blogspot.com","type":"User","login":"brunolopesjn","email":"brunolopesjn@gmail.com"},"created_at":"2012/04/11 15:01:37 -0700","public":true,"actor":"brunolopesjn","payload":{"head":"8469f67ff919f2a776336bfe61f5ae7f40e76c72","size":1,"shas":[["8469f67ff919f2a776336bfe61f5ae7f40e76c72","brunolopesjn@gmail.com","Criado a interface grafica base, a Ã¡rea de desenho dos pontos, o desenho\ndo plano cartesiano e a lÃ³gica de abertura de arquivos.","Bruno Lopes Alcantara Batista",true]],"ref":"refs/heads/master"},"
+forks":1,"fork":false,"has_wiki":true,"url":"https://github.com/brunolopesjn/JConvexHull","created_at":"2012/04/10 18:37:34 -0700","size":208,"private":false,"name":"JConvexHull","description":"Programa Java Swing que resolve o problema do caixeiro viajante (TSP) utilizando o Convexo de Hull","owner":"brunolopesjn","open_issues":0,"watchers":1,"pushed_at":"2012/04/11 15:01:36 -0700"},"actor_attributes":{"name":"Bruno Lopes Alcantara Batista","gravatar_id":"854bf813e2a302dcc4a059b89c502424","blog":"kariridev.blogspot.com","type":"User","login":"brunolopesjn","email":"brunolopesjn@gmail.com"},"created_at":"2012/04/11 15:01:37 -0700","public":true,"actor":"brunolopesjn","payload":{"head":"8469f67ff919f2a776336bfe61f5ae7f40e76c72","size":1,"shas":[["8469f67ff919f2a776336bfe61f5ae7f40e76c72","brunolopesjn@gmail.com","Criado a interface grafica base, de desenho dos pontos, o desenho\ndo plano cartesiano e a ica de abertura de arquivos.","Bruno Lopes Alcantara Batista",true]],"ref":"refs/heads/master"},"
 url":"https://github.com/brunolopesjn/JConvexHull/compare/ea77edbd70...8469f67ff9","type":"PushEvent"}
 \end{lstlisting}
 
@@ -358,6 +361,11 @@ SELECT * FROM `events` WHERE `actor` = 'mitar' AND `repository_owner` = 'mitar'
  # specific Issues properties
  SELECT payload_number, payload_action, payload_issue from events where type   = 'IssuesEvent' LIMIT 30;
 
+
+# user profiling
+INSERT INTO eng_users (user, TotalEvents,  IssuesEvent , CreateEvent , PushEvent , GistEvent , IssueCommentEvent , CommitCommentEvent , ForkEvent , WatchEvent , PullRequestEvent , PullRequestReviewCommentEvent , FollowEvent , GollumEvent , DeleteEvent , MemberEvent , DownloadEvent , PublicEvent, Issues_Opened, Issues_Closed, Events_Own, Events_Active_Involvement, Events_Passive_Involvment)  SELECT '" + user_i[0] +"' , COUNT(*),  SUM(Type = 'IssuesEvent'),  SUM(Type = 'CreateEvent'), SUM(Type = 'PushEvent'), SUM(Type = 'GistEvent'), SUM(Type = 'IssueCommentEvent'),SUM(Type = 'CommitCommentEvent'),SUM(Type = 'ForkEvent'),SUM(Type = 'WatchEvent'),SUM(Type = 'PullRequestEvent'),SUM(Type = 'PullRequestReviewCommentEvent'),SUM(Type = 'FollowEvent'),SUM(Type = 'GollumEvent'),   SUM(Type = 'DeleteEvent'), SUM(Type = 'MemberEvent'), SUM(Type = 'DownloadEvent'), SUM(Type = 'PublicEvent'), SUM(type = 'IssuesEvent' AND payload_action='opened'), SUM(type = 'IssuesEvent' AND payload_action='closed'),   SUM(actor = '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'),  SUM(actor = '" + user_i[0] +"' AND `repository_owner` != '" + user_i[0] +"') , SUM( actor != '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'   )   FROM events WHERE actor_attributes_type = 'User' AND actor_attributes_login = '" + user_i[0] +"' ON DUPLICATE KEY UPDATE user = '" + user_i[0] +"' ;
+# passive involvement:
+UPDATE eng_users SET Events_Passive_Involvment = ( SELECT COUNT( * )  FROM  `events`  WHERE  `repository_organization` IS NULL  AND   `repository_owner` =  'torvalds' AND actor !=  'torvalds' )  WHERE eng_users.user =  'torvalds'
 \end{lstlisting}
 
 

@@ -98,15 +98,21 @@
 \section{Fundamental and Derived Measures}
 \subsection{Terminology}
 \begin{description}
- \item[Gist] Gists are snippets of code to be shared with others. Can be clone, forked etc. like a repository.
-\item [Fork] Forks are clones/copies of a repository or Gist into a User's own account.
+\item[Issue] An issue is a generalized form of everything which should be improved on a piece of software, like for instance bug reports or new feature requests.
+\item [Commit] A commit is the action of submitting new code to the repository. Typically, commits are made \textbf{decentralized}, which means that the developer is typing "commit" on his own computer. One or several commits can be uploaded via a Push.
+\item [Push ] A push is a the action of uploading committed source code to the repository. It's one of the key features of Git's decentralized environment. During a push event, editing conflicts can emerge and then need to be resolved.
+ \item[Gist] Gists are snippets of code to be shared with others, interdependent of a repository. Can be cloned, forked etc. like a repository.
+\item [Fork] Forks are clones/copies of a repository or Gist into a User's own account. The can be used to parallelize development of the project, the feedback to the original project can be done via \textit{PullRequests.}
+\item [PullRequest] 
+\item [Payload] Typically describes the contents of an action (like the source code itself, the comments itself, all acompanying information but not the meta-data.)
 \end{description}
 
 Detailed information on Github's Event API can be found in \url{http://developer.github.com/v3/activity/events/types/} .
 
 \subsection{Users}
-
-\begin{tabular}{|p{2.5cm}|p{4cm}|p{4cm}|p{2cm}|}\hline
+\begin{center}
+ 
+\begin{tabular}{|p{2.5cm}|p{5cm}|p{6cm}|p{2cm}|}\hline
 \textbf{Event type} & \textbf{Description}&  \textbf{Contents}& \textbf{\#  for all users in example dataset} \\\hline
  IssuesEvent  & An issues is opened or closed.   &  Opened \& Closed Issues, Assignee (API) &29368\\\hline
 CreateEvent    &    & &  116683\\\hline
@@ -122,18 +128,19 @@ PullRequestEvent     &    &  &  20818\\\hline
 PullRequest
 ReviewCommentEvent  & && 3726\\\hline
 FollowEvent   &    &  & 17049\\\hline
-GollumEvent  &    &  &  11781\\\hline
-DeleteEvent   &    &  &   3785\\\hline
-MemberEvent   &    & &    2764\\\hline
+GollumEvent  &  Update of Wikipages, such as release notes& Page name (e.g. "Release Notes") , Action (created, edited), URL  &  11781\\\hline
+DeleteEvent   & Either a branch or tag is removed.   &  Delete Type (Branch or Tag), Name of Deleted Object&   3785\\\hline
+MemberEvent   & Users can be made collaborators, thereby given advanced "write" permissions to the repository.   & &    2764\\\hline
 DownloadEvent  &    & & 2576\\\hline
 PublicEvent &  &    &  553\\\hline
-TotalEvents & - & - & 672152 \\\hline
+TotalEvents & Counts all of the above. & - & 672152 \\\hline
 \end{tabular}
+\end{center}
 
 
 
 
-\textbf{Constructed measures}:
+\subsubsection{Constructed measures}
 \begin{description}
  \item [Issues\_Opened] \# of issues the user has opened
  \item [Issues\_Closed] \# of issues the user has closed
@@ -147,6 +154,10 @@ TotalEvents & - & - & 672152 \\\hline
 
 \subsection{Repositories}
 
+\subsubsection{Constructed measures}
+\begin{description}
+ \item [Distinct\_Contributing\_Users] Number of different users contributing via IssuesEvent, CreateEvent, PushEvent, PullRequestEvent
+\end{description}
 
 
 \section{Constructed Leadership Measures}
@@ -319,9 +330,16 @@ url":"https://github.com/brunolopesjn/JConvexHull/compare/ea77edbd70...8469f67ff
 \end{lstlisting}
 
 
+\subsubsection{GollumEvent}
+\begin{lstlisting}
+{"repository":{"homepage":"http://www.sisodb.com","has_downloads":true,"has_issues":true,"forks":4,"language":"C#","fork":false,"has_wiki":true,"url":"https://github.com/
+danielwertheim/SisoDb-Provider","created_at":"2011/01/31 05:33:16 -0800","size":3472,"private":false,"name":"SisoDb-Provider","description":"SisoDb - Simple Structure Oriented Db","owner":"danielwertheim","open_issues":0,"watchers":52,"pushed_at":"2012/04/11 14:52:42 -0700"},"actor_attributes":{"name":"Daniel Wertheim","gravatar_id":"274ce0291206c9d27635a865ac48b5c4","location":"Sweden","blog":"http://daniel.wertheim.se","type":"User","login":"danielwertheim"},"created_at":"2012/04/11 15:01:37 -0700","public":true,"actor":"danielwertheim","payload":{"pages":[{"sha":"909e1049863468ad462655505441bf7bf39dc739","title":"Release notes","action":"edited","page_name":"Release notes","summary":null,"html_url":"https://github.com/danielwertheim/SisoDb-Provider/wiki/Release-notes"}]},"url":"https://github.com/danielwertheim/SisoDb-Provider/wiki/Release-notes","type":"GollumEvent"}
+\end{lstlisting}
 
-
-
+\subsubsection{DeleteEvent}
+\begin{lstlisting}
+{"repository":{"homepage":"","has_downloads":true,"has_issues":false,"master_branch":"master","forks":0,"language":"Shell","fork":true,"has_wiki":true,"url":"https://github.com/travp624/android_device_moto_shadow","created_at":"2012/04/03 01:32:24 -0700","size":6060,"private":false,"name":"android_device_moto_shadow","description":"","owner":"travp624","open_issues":0,"watchers":1,"pushed_at":"2012/04/11 15:02:07 -0700"},"actor_attributes":{"name":"teamicemods","gravatar_id":"1eb4d77c7c79eccde05a7047fbae4195","location":"wisconsin home of cheese baby","blog":"","type":"User","login":"travp624","email":"travp624@gmail.com"},"created_at":"2012/04/11 15:02:07 -0700","public":true,"actor":"travp624","payload":{"ref_type":"branch","ref":"ics"},"url":"https://github.com/","type":"DeleteEvent"}
+\end{lstlisting}
 
 
 \subsection{SQL Queries Temp}
@@ -363,12 +381,18 @@ SELECT * FROM `events` WHERE `actor` = 'mitar' AND `repository_owner` = 'mitar'
 
 
 # user profiling
-INSERT INTO eng_users (user, TotalEvents,  IssuesEvent , CreateEvent , PushEvent , GistEvent , IssueCommentEvent , CommitCommentEvent , ForkEvent , WatchEvent , PullRequestEvent , PullRequestReviewCommentEvent , FollowEvent , GollumEvent , DeleteEvent , MemberEvent , DownloadEvent , PublicEvent, Issues_Opened, Issues_Closed, Events_Own, Events_Active_Involvement, Events_Passive_Involvment)  SELECT '" + user_i[0] +"' , COUNT(*),  SUM(Type = 'IssuesEvent'),  SUM(Type = 'CreateEvent'), SUM(Type = 'PushEvent'), SUM(Type = 'GistEvent'), SUM(Type = 'IssueCommentEvent'),SUM(Type = 'CommitCommentEvent'),SUM(Type = 'ForkEvent'),SUM(Type = 'WatchEvent'),SUM(Type = 'PullRequestEvent'),SUM(Type = 'PullRequestReviewCommentEvent'),SUM(Type = 'FollowEvent'),SUM(Type = 'GollumEvent'),   SUM(Type = 'DeleteEvent'), SUM(Type = 'MemberEvent'), SUM(Type = 'DownloadEvent'), SUM(Type = 'PublicEvent'), SUM(type = 'IssuesEvent' AND payload_action='opened'), SUM(type = 'IssuesEvent' AND payload_action='closed'),   SUM(actor = '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'),  SUM(actor = '" + user_i[0] +"' AND `repository_owner` != '" + user_i[0] +"') , SUM( actor != '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'   )   FROM events WHERE actor_attributes_type = 'User' AND actor_attributes_login = '" + user_i[0] +"' ON DUPLICATE KEY UPDATE user = '" + user_i[0] +"' ;
+INSERT INTO eng_users (user, TotalEvents,  IssuesEvent , CreateEvent , PushEvent , GistEvent , IssueCommentEvent , CommitCommentEvent , ForkEvent , WatchEvent , PullRequestEvent , PullRequestReviewCommentEvent , FollowEvent , GollumEvent , DeleteEvent , MemberEvent , DownloadEvent , PublicEvent, Issues_Opened, Issues_Closed, Events_Own, Events_Active_Involvement, Events_Passive_Involvment)  SELECT '" + user_i[0] +"' , COUNT(*),  SUM(Type = 'IssuesEvent'),  SUM(Type = 'CreateEvent'), SUM(Type = 'PushEvent'), SUM(Type = 'GistEvent'), SUM(Type = 'IssueCommentEvent'),SUM(Type = 'CommitCommentEvent'),SUM(Type = 'ForkEvent'),SUM(Type = 'WatchEvent'),SUM(Type = 'PullRequestEvent'),SUM(Type = 'PullRequestReviewCommentEvent'),SUM(Type = 'FollowEvent'),SUM(Type = 'GollumEvent'),   SUM(Type = 'DeleteEvent'), SUM(Type = 'MemberEvent'), SUM(Type = 'DownloadEvent'), SUM(Type = 'PublicEvent'), SUM(type = 'IssuesEvent' AND payload_action='opened'), SUM(type = 'IssuesEvent' AND payload_action='closed'),   SUM(actor = '" + 
+user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'),  SUM(actor = '" + user_i[0] +"' AND `repository_owner` != '" + user_i[0] +"') , SUM( actor != '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'   )   FROM events WHERE actor_attributes_type = 'User' AND actor_attributes_login = '" + user_i[0] +"' ON DUPLICATE KEY UPDATE user = '" + user_i[0] +"' ;
 # passive involvement:
 UPDATE eng_users SET Events_Passive_Involvment = ( SELECT COUNT( * )  FROM  `events`  WHERE  `repository_organization` IS NULL  AND   `repository_owner` =  'torvalds' AND actor !=  'torvalds' )  WHERE eng_users.user =  'torvalds'
 \end{lstlisting}
 
 
+\section{Performance Optimization}
+Lessons learned:
+\begin{itemize}
+ \item 
+\end{itemize}
 
 
 

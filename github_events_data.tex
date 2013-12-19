@@ -78,7 +78,7 @@
 
 
 %opening
-\title{Github Events Data}
+\title{Github Events Data Documentation DRAFT}
 \author{Thomas Gersdorf}
 
 \addbibresource{smi.bib}
@@ -101,6 +101,7 @@
 \section{Fundamental and Derived Measures}
 \subsection{Terminology}
 \begin{description}
+\item [Repository] A repository is the basic 'project' unit in language of software development. A user or an organization can have many software repositories. Each repository typically has branches (very often with a 'main' branch) which represent different development streams within the project. A repository typically also releases ready pieces of software.
 \item[Issue] An issue is a generalized form of everything which should be improved on a piece of software, like for instance bug reports or new feature requests.
 \item [Commit] A commit is the action of submitting new code to the repository. Typically, commits are made \textbf{decentralized}, which means that the developer is typing "commit" on his own computer. One or several commits can be uploaded via a push.
 \item [Push ] A push is a the action of uploading committed source code to the repository. It's one of the key features of Git's decentralized environment. During a push event, editing conflicts can emerge and then need to be resolved.
@@ -587,6 +588,14 @@ INSERT INTO eng_users (user, TotalEvents,  IssuesEvent , CreateEvent , PushEvent
 user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'),  SUM(actor = '" + user_i[0] +"' AND `repository_owner` != '" + user_i[0] +"') , SUM( actor != '" + user_i[0] +"' AND `repository_owner` = '" + user_i[0] +"'   )   FROM events WHERE actor_attributes_type = 'User' AND actor_attributes_login = '" + user_i[0] +"' ON DUPLICATE KEY UPDATE user = '" + user_i[0] +"' ;
 # passive involvement:
 UPDATE eng_users SET Events_Passive_Involvment = ( SELECT COUNT( * )  FROM  `events`  WHERE  `repository_organization` IS NULL  AND   `repository_owner` =  'torvalds' AND actor !=  'torvalds' )  WHERE eng_users.user =  'torvalds'
+
+
+
+
+# user commit networking:
+SELECT *  FROM  `events`  WHERE  `type` LIKE  'PullRequestEvent' AND  `payload_action` LIKE  'Closed' AND  `repository_url` LIKE  'https://github.com/rails/rails'
+SELECT DISTINCT(CONCAT(actor,payload_pull_request_head_repo_owner_login)),actor,payload_pull_request_head_repo_owner_login
+FROM  `events`  WHERE  `type` LIKE  'PullRequestEvent' AND  `payload_action` LIKE  'Closed' AND  `repository_url` LIKE  'https://github.com/rails/rails'
 \end{lstlisting}
 
 
